@@ -24,11 +24,7 @@ app.use(
   })
 );
 
-app.use(cors({
-    credentials: true,
-    origin: process.env.FRONTEND_URL,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-}));
+app.use(cors());
 
 app.get("/", (req, res, next) => {
   res.status(200).json({
