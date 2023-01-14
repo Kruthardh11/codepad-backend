@@ -6,7 +6,7 @@ import cookieParser from "cookie-parser";
 import userRoute from "./routes/user.js";
 import editorRoute from "./routes/editor.js";
 import folderRoute from "./routes/folder.js";
-import passport from "passport";
+// import passport from "passport";
 import { errorMiddleware } from "./middlewares/errorMiddleware.js";
 import cors from "cors";
 const app = express();
@@ -51,7 +51,7 @@ app.use(
 //     methods: ["GET", "POST", "PUT", "DELETE"],
 //   })
 // );
-app.use(cors({ origin: process.env.FRONTEND_URL }));
+app.use(cors());
 app.get("/", (req, res, next) => {
   res.status(200).json({
     success: true,
@@ -60,10 +60,10 @@ app.get("/", (req, res, next) => {
   next();
 });
 //session ke baad hm app.use(passport krenge)
-app.use(passport.authenticate("session"));
-app.use(passport.initialize());
-app.use(passport.session());
-app.enable("trust proxy");
+// app.use(passport.authenticate("session"));
+// app.use(passport.initialize());
+// app.use(passport.session());
+// app.enable("trust proxy");
 
 //COnfig connect hone ke baad call krna hai hme connectPassport
 connectPassport();
