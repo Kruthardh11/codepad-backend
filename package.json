@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel src -d dist --ignore 'src/**/*.test.js'"
+    "build": "webpack --config webpack.config.js"
   },
   "author": "",
   "license": "ISC",
