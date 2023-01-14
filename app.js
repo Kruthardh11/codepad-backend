@@ -52,6 +52,13 @@ app.use(
 //   })
 // );
 app.use(cors())
+app.get("/", (req, res, next) => {
+  res.status(200).json({
+    success: true,
+    message: "Working",
+  });
+  next();
+});
 //session ke baad hm app.use(passport krenge)
 app.use(passport.authenticate("session"));
 app.use(passport.initialize());
