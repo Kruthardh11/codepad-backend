@@ -1,4 +1,4 @@
-import express, { application, urlencoded } from "express";
+import express, { urlencoded } from "express";
 import dotenv from "dotenv";
 import { connectPassport } from "./utils/Provider.js";
 import session from "express-session";
@@ -8,46 +8,34 @@ import editorRoute from "./routes/editor.js";
 import folderRoute from "./routes/folder.js";
 import passport from "passport";
 import { errorMiddleware } from "./middlewares/errorMiddleware.js";
-dotenv.config({
-  path: "./config/config.env",
-});
+import cors from "cors";
 const app = express();
 
 export default app;
-
-//Using Middlewares
-// Add headers before the routes are defined
-app.use(function (req, res, next) {
-  // Website you wish to allow to connect
-  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
-
-  // Request methods you wish to allow
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
-  );
-
-  // Request headers you wish to allow
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "X-Requested-With,content-type"
-  );
-
-  // Set to true if you need the website to include cookies in the requests sent
-  // to the API (e.g. in case you use sessions)
-  res.setHeader("Access-Control-Allow-Credentials", true);
-
-  // Pass to next layer of middleware
-  next();
+dotenv.config({
+  path: "./config/config.env",
 });
-
+// Using Middlewares
 app.use(
   session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+
+    cookie: {
+      secure: process.env.NODE_ENV === "development" ? false : true,
+      httpOnly: process.env.NODE_ENV === "development" ? false : true,
+      sameSite: process.env.NODE_ENV === "development" ? false : "none",
+    },
   })
 );
+// app.use(
+//   session({
+//     secret: process.env.SESSION_SECRET,
+//     resave: false,
+//     saveUninitialized: false,
+//   })
+// );
 app.use(cookieParser());
 
 app.use(express.json());
@@ -56,10 +44,18 @@ app.use(
     extended: true,
   })
 );
+app.use(
+  cors({
+    credentials: true,
+    origin: process.env.FRONTEND_URL,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  })
+);
 //session ke baad hm app.use(passport krenge)
 app.use(passport.authenticate("session"));
 app.use(passport.initialize());
 app.use(passport.session());
+app.enable("trust proxy");
 
 //COnfig connect hone ke baad call krna hai hme connectPassport
 connectPassport();
