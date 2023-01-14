@@ -51,7 +51,7 @@ app.use(
 //     methods: ["GET", "POST", "PUT", "DELETE"],
 //   })
 // );
-app.use(cors())
+app.use(cors({ origin: process.env.FRONTEND_URL }));
 app.get("/", (req, res, next) => {
   res.status(200).json({
     success: true,
