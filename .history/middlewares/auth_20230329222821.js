@@ -6,5 +6,4 @@ export const isAuthenticated = (req, res, next) => {
     return next(new ErrorHandler("Not Logged In", 401));
   }
   next();
-  //
 };
